@@ -50,9 +50,10 @@ func (s *Client) Initialize() *s3.S3 {
 	}
 
 	sess, err := session.NewSession(&aws.Config{
-		Credentials: credentials.NewStaticCredentials(s.AccessKey, s.SecretAccessKey, ""),
-		Region:      aws.String(s.Region),
-		Endpoint:    aws.String(s.Endpoint),
+		Credentials:      credentials.NewStaticCredentials(s.AccessKey, s.SecretAccessKey, ""),
+		Region:           aws.String(s.Region),
+		Endpoint:         aws.String(s.Endpoint),
+		S3ForcePathStyle: aws.Bool(true), // Required for MinIO and some other S3-compatible storages
 	})
 
 	if err != nil {
