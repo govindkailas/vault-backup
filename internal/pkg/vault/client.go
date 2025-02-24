@@ -1,6 +1,7 @@
 package vault
 
 import (
+	"fmt"
 	vault "github.com/hashicorp/vault/api"
 	"time"
 )
