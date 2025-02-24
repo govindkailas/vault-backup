@@ -48,29 +48,29 @@ For more details use `vault-backup --help`
 ### backup
 
 ```
-./vault-backup backup -t token -a http://vault.local:8200 --s3-access-key xxx --s3-secret-key xxx --s3-bucket test-vault-backup
+./vault-backup backup -t token -a http://vault.local:8200 --vault-cacert=/path/to/ca.crt --s3-access-key xxx --s3-secret-key xxx --s3-bucket test-vault-backup
 ```
 
 ```
-VAULT_TOKEN=xxx VAULT_ADDRESS=http://vault.vault:8200 S3_ACCESS_KEY=xxx S3_SECRET_KEY=xxx S3_BUCKET=vault-backup-bucket ./vault-backup backup
+VAULT_TOKEN=xxx VAULT_ADDRESS=http://vault.vault:8200 VAULT_CACERT=/path/to/ca.crt S3_ACCESS_KEY=xxx S3_SECRET_KEY=xxx S3_BUCKET=vault-backup-bucket ./vault-backup backup
 ```
 
 ```
-docker run -it --rm -e VAULT_TOKEN=xxx -e VAULT_ADDRESS=http://vault.vault:8200 -e S3_ACCESS_KEY=xxx -e S3_SECRET_KEY=xxx -e S3_BUCKET=vault-backup-bucket alv91/vault-backup backup
+docker run -it --rm -e VAULT_TOKEN=xxx -e VAULT_ADDRESS=http://vault.vault:8200 -e VAULT_CACERT=/path/to/ca.crt -e S3_ACCESS_KEY=xxx -e S3_SECRET_KEY=xxx -e S3_BUCKET=vault-backup-bucket alv91/vault-backup backup
 ```
 
 ### restore
 
 ```
-./vault-backup restore -t token -a http://vault.local:8200 --s3-access-key xxx --s3-secret-key xxx --s3-bucket test-vault-backup --s3-filename backup-20060102-150405.snap
+./vault-backup restore -t token -a http://vault.local:8200 --vault-cacert=/path/to/ca.crt --s3-access-key xxx --s3-secret-key xxx --s3-bucket test-vault-backup --s3-filename backup-20060102-150405.snap
 ```
 
 ```
-VAULT_TOKEN=xxx VAULT_ADDRESS=http://vault.vault:8200 S3_ACCESS_KEY=xxx S3_SECRET_KEY=xxx S3_BUCKET=vault-backup-bucket S3_FILENAME=backup-20060102-150405.snap ./vault-backup restore
+VAULT_TOKEN=xxx VAULT_ADDRESS=http://vault.vault:8200 VAULT_CACERT=/path/to/ca.crt S3_ACCESS_KEY=xxx S3_SECRET_KEY=xxx S3_BUCKET=vault-backup-bucket S3_FILENAME=backup-20060102-150405.snap ./vault-backup restore
 ```
 
 ```
-docker run -it --rm -e VAULT_TOKEN=xxx -e VAULT_ADDRESS=http://vault.vault:8200 -e S3_ACCESS_KEY=xxx -e S3_SECRET_KEY=xxx -e S3_BUCKET=vault-backup-bucket alv91/vault-backup restore 
+docker run -it --rm -e VAULT_TOKEN=xxx -e VAULT_ADDRESS=http://vault.vault:8200 -e VAULT_CACERT=/path/to/ca.crt -e S3_ACCESS_KEY=xxx -e S3_SECRET_KEY=xxx -e S3_BUCKET=vault-backup-bucket alv91/vault-backup restore 
 ```
 
 ### Helm
