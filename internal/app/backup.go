@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/alv91/vault-backup/internal/pkg/s3"
-	"github.com/alv91/vault-backup/internal/pkg/vault"
+	"github.com/govindkailas/vault-backup/internal/pkg/s3"
+	"github.com/govindkailas/vault-backup/internal/pkg/vault"
 )
 
 const (

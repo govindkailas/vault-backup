@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/alv91/vault-backup/internal/app"
-	"github.com/alv91/vault-backup/internal/pkg/s3"
-	"github.com/alv91/vault-backup/internal/pkg/vault"
+	"github.com/govindkailas/vault-backup/internal/app"
+	"github.com/govindkailas/vault-backup/internal/pkg/s3"
+	"github.com/govindkailas/vault-backup/internal/pkg/vault"
 	"github.com/spf13/cobra"
 )
 
