@@ -29,6 +29,7 @@ the same values.
 | VAULT_TOKEN     | --vault-token / -t     | vault authentication token                               | true |                            |
 | VAULT_NAMESPACE | --vault-namespace / -n | vault namespace to use                                   | false | admin                      |
 | VAULT_TIMEOUT   | --vault-timeout        | vault client timeout                                     | false | 60s                        |
+| VAULT_CACERT    | --vault-cacert         | path to the Vault CA certificate                         | false |                            |
 | S3_ACCESS_KEY   | --s3-access-key        | AWS access key with permissions to bucket                | false |                            |
 | S3_SECRET_KEY   | --s3-secret-key        | AWS secret key with permissions to bucket                | false |                            |
 | S3_BUCKET       | --s3-bucket            | S3 bucket name                                           | true |                            |
