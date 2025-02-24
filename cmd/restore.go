@@ -5,6 +5,8 @@ import (
 	"github.com/govindkailas/vault-backup/internal/pkg/s3"
 	"github.com/govindkailas/vault-backup/internal/pkg/vault"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
 )
 
 var forceRestore bool
