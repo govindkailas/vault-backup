@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/spf13/viper"
+
 	"strings"
 	"time"
 
@@ -16,7 +17,7 @@ import (
 )
 
 var (
-	cfgFile        string
+	cfgFile string
 	vaultAddr      string
 	vaultToken     string
 	vaultNamespace string
