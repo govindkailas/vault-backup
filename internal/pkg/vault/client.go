@@ -20,7 +20,7 @@ type Config struct {
 	TmpPath      string
 	FileName     string
 	Timeout      time.Duration
-	CACert       string // Added CA Cert field
+	CACert       string
 }
 
 func NewClient(config *Config) (*Client, error) {
@@ -43,9 +43,11 @@ func NewClient(config *Config) (*Client, error) {
 		}
 	}
 
-	if config.Token != "" {
-		client.SetToken(config.Token)
-		client.SetClientTimeout(config.Timeout)
+	client.SetToken(config.Token)
+	client.SetClientTimeout(config.Timeout)
+
+	if config.Namespace == "" {
+		config.Namespace = DEFAULT_VAULT_NAMESPACE
 	}
 
 	if config.Namespace == "" {
