@@ -15,16 +15,15 @@ const (
 	SNAPASHOT_EXTENSION = "snap"
 )
 
-func Backup(vConfig *vault.Config, s3Config *s3.Client) (err error) {
+func Backup(vConfig *vault.Config, s3Config *s3.Client) error { // Removed caCertPath
 	fileName := fmt.Sprintf("backup-%s.%s", time.Now().Format(TIME_LAYOUT), SNAPASHOT_EXTENSION)
 
 	fmt.Println("Starting backup...")
 
 	// create vault client
-	vaultClient, err := vault.NewClient(vConfig)
+	vaultClient, err := vault.NewClient(vConfig) // vConfig now includes CACert
 	if err != nil {
 		fmt.Println(err)
-
 		return err
 	}
 

@@ -10,7 +10,7 @@ import (
 	"github.com/govindkailas/vault-backup/internal/pkg/vault"
 )
 
-func Restore(vConfig *vault.Config, s3Config *s3.Client) (err error) {
+func Restore(vConfig *vault.Config, s3Config *s3.Client) error { // Removed caCertPath
 	fmt.Println("Starting restore...")
 
 	// create s3 client
@@ -19,8 +19,7 @@ func Restore(vConfig *vault.Config, s3Config *s3.Client) (err error) {
 	// check if file exists
 	if s3Client.HeadObject() == nil {
 		fmt.Println("Backup not found in s3 bucket!")
-
-		return err
+		return fmt.Errorf("backup not found in s3 bucket") // Return a proper error
 	}
 
 	// get backup from s3Config
@@ -37,10 +36,9 @@ func Restore(vConfig *vault.Config, s3Config *s3.Client) (err error) {
 	r := bufio.NewReader(buf)
 
 	// create vault client
-	vaultClient, err := vault.NewClient(vConfig)
+	vaultClient, err := vault.NewClient(vConfig) // vConfig now includes CACert
 	if err != nil {
 		fmt.Println(err)
-
 		return err
 	}
 
@@ -48,11 +46,10 @@ func Restore(vConfig *vault.Config, s3Config *s3.Client) (err error) {
 	err = vaultClient.Restore(r)
 	if err != nil {
 		fmt.Println(err)
-
 		return err
 	}
 
-	fmt.Printf("Restored backup with name '%s'.", s3Config.FileName)
+	fmt.Printf("Restored backup with name '%s'.\n", s3Config.FileName)
 
 	return nil
 }

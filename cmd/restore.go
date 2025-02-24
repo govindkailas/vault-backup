@@ -13,29 +13,27 @@ var forceRestore bool
 var restoreCmd = &cobra.Command{
 	Use:   "restore",
 	Short: "Restore a vault backup from raft snapshot",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error { // Use RunE for error handling
 
 		vaultCfg := &vault.Config{
-			Token:        vaultToken,
-			Address:      vaultAddr,
-			Namespace:    vaultNamespace,
-			Timeout:      vaultTimeout,
+			Token:        viper.GetString("vault_token"),
+			Address:      viper.GetString("vault_address"),
+			Namespace:    viper.GetString("vault_namespace"),
+			Timeout:      viper.GetDuration("vault_timeout"),
 			ForceRestore: forceRestore,
+			CACert:       viper.GetString("vault_ca_cert"), // Get CA Cert from viper
 		}
 
 		s3Cfg := &s3.Client{
-			AccessKey:       s3AccessKey,
-			SecretAccessKey: s3SecretKey,
-			Region:          s3Region,
-			Bucket:          s3Bucket,
-			Endpoint:        s3Endpoint,
-			FileName:        s3FileName,
+			AccessKey:       viper.GetString("s3_access_key"),
+			SecretAccessKey: viper.GetString("s3_secret_key"),
+			Region:          viper.GetString("s3_region"),
+			Bucket:          viper.GetString("s3_bucket"),
+			Endpoint:        viper.GetString("s3_endpoint"),
+			FileName:        viper.GetString("s3_filename"),
 		}
 
-		err := app.Restore(vaultCfg, s3Cfg)
-		if err != nil {
-			panic(err)
-		}
+		return app.Restore(vaultCfg, s3Cfg) // No need for caCertPath argument anymore
 	},
 }
 

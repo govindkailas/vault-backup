@@ -20,6 +20,7 @@ type Config struct {
 	TmpPath      string
 	FileName     string
 	Timeout      time.Duration
+	CACert       string // Added CA Cert field
 }
 
 func NewClient(config *Config) (*Client, error) {
@@ -30,6 +31,16 @@ func NewClient(config *Config) (*Client, error) {
 	client, err := vault.NewClient(vaultConfig)
 	if err != nil {
 		return nil, err
+	}
+
+	if config.CACert != "" { // Check if CACert is provided
+		tlsConfig := &vault.TLSConfig{
+			CACert: config.CACert,
+		}
+		err = vaultConfig.ConfigureTLS(tlsConfig)
+		if err != nil {
+			return nil, fmt.Errorf("failed to configure TLS: %w", err)
+		}
 	}
 
 	if config.Token != "" {

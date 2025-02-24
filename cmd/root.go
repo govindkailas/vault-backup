@@ -17,6 +17,7 @@ var (
 	vaultToken     string
 	vaultNamespace string
 	vaultTimeout   time.Duration
+	vaultCACert    string // Added variable for CA Cert
 	s3AccessKey    string
 	s3SecretKey    string
 	s3Bucket       string
@@ -48,6 +49,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&vaultNamespace, "vault-namespace", "n", "admin", "vault namespace")
 	rootCmd.PersistentFlags().StringVarP(&vaultToken, "vault-token", "t", "", "vault token")
 	rootCmd.PersistentFlags().DurationVar(&vaultTimeout, "vault-timeout", 60*time.Second, "vault client timeout")
+	rootCmd.PersistentFlags().StringVar(&vaultCACert, "vault-ca-cert", "", "Path to the Vault CA certificate file") // Added CA Cert flag
 	rootCmd.PersistentFlags().StringVar(&s3AccessKey, "s3-access-key", "", "s3 access key")
 	rootCmd.PersistentFlags().StringVar(&s3SecretKey, "s3-secret-key", "", "s3 secret key")
 	rootCmd.PersistentFlags().StringVar(&s3Bucket, "s3-bucket", "", "s3 bucket")
@@ -55,6 +57,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&s3Endpoint, "s3-endpoint", "", "s3 endpoint")
 	rootCmd.PersistentFlags().StringVar(&s3FileName, "s3-filename", "backup-latest.snap", "s3 filename to restore")
 
+	// Bind flags using the improved method
+	bindFlags(rootCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -74,10 +78,7 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
-
-	_ = viper.BindPFlags(rootCmd.PersistentFlags())
-	bindFlags(rootCmd)
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_")) // Replaces '-' with '_' in env vars
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
@@ -85,17 +86,23 @@ func initConfig() {
 	}
 }
 
-// Bind each cobra flag to its associated viper configuration (config file and environment variable)
-// This is required because viper doesn't work with cobra flags that are also bound to a variable
-// (e.g. using StringVar to bind a flag to a string variable). See https://github.com/spf13/viper/issues/671.
+// Bind each cobra flag to its associated viper configuration (config file and environment variable).
 func bindFlags(cmd *cobra.Command) {
-
 	cmd.PersistentFlags().VisitAll(func(f *pflag.Flag) {
+		// Determine the name in the config file (replace - with _ )
+		configName := strings.ReplaceAll(f.Name, "-", "_")
+
+		// Bind flag to viper (config file)
+		viper.BindPFlag(configName, f)
+
+		// Bind flag to environment variable (uppercase and replace - with _)
+		envVar := strings.ToUpper(configName)
+		viper.BindEnv(configName, envVar)
+
 		// Apply the viper config value to the flag when the flag is not set and viper has a value
-		if !f.Changed && viper.IsSet(f.Name) {
-			val := viper.Get(f.Name)
+		if !f.Changed && viper.IsSet(configName) {
+			val := viper.Get(configName)
 			cmd.PersistentFlags().Set(f.Name, fmt.Sprintf("%v", val))
 		}
 	})
-
 }
